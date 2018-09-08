@@ -22,13 +22,18 @@ class PasienController extends Controller
         $this->middleware('auth');
     }
 
-    public function tambah($id)
+    public function tambah($id = null)
     {
-        $pasien = Pasien::find($id);
-        $data = [
-            'pasien' => $pasien
-        ];
-        return view('admin.tambah',$data);
+        if (isset($id)) {
+            $pasien = Pasien::find($id);
+            $data = [
+                'pasien' => $pasien
+            ];
+            return view('admin.pasien.tambah',$data);
+        } else {
+            return view('admin.pasien.tambah');
+        }
+        
     } 
 
     public function edit($id)
@@ -36,7 +41,7 @@ class PasienController extends Controller
         $data = [
             'data' => Pasien::find($id)
         ];
-        return view('admin.edit',$data);
+        return view('admin.pasien.edit',$data);
     }
 
     public function editPost(Request $request)
@@ -103,7 +108,7 @@ class PasienController extends Controller
 
     public function create()
     {
-        return view('admin.tambah');
+        return view('admin.pasien.tambah');
     }
 
     public function add(Request $request)
@@ -132,7 +137,7 @@ class PasienController extends Controller
         } else {
             $jenisKelamin = $request->input('jenis_kelamin');
             switch ($request->input('umur')) {
-                case $request->input('umur') >= 1:
+                case $request->input('umur') <= 1:
                     $umur = 'u1';
                     break;
                 case $request->input('umur') == 2:
@@ -184,7 +189,7 @@ class PasienController extends Controller
             'title' => $title
         ];
         
-        return view('admin.index', $data);
+        return view('admin.pasien.index', $data);
     }
 
     //1. get gejala by id

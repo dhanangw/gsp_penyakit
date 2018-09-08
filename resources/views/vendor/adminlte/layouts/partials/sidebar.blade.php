@@ -25,8 +25,8 @@
             <li class="header">Menu</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a href="{{ url('admin/index') }}"><i class='fa fa-link'></i> <span>Manajemen Pasien</span></a></li>
+            <li><a href="{{ url('admin/kategori/index') }}"><i class='fa fa-link'></i> <span>Manajemen Kategori</span></a></li>
             <li><a href="{{ url('/caripola') }}"><i class='fa fa-link'></i> <span>Cari Pola Pasien</span></a></li>
-            
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

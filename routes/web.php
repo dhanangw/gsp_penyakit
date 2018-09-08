@@ -25,7 +25,23 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{id}/edit','PasienController@edit');  
         Route::post('/editpost','PasienController@editPost');  
         Route::get('/{id}/viewDetail', 'PasienController@index');  
-        Route::get('/{id}/tambah','PasienController@tambah');  
+        Route::get('/{id}/tambah','PasienController@tambah');
+
+        Route::group(['prefix'=>'kategori'], function(){
+            Route::get('/index', 'KategoriController@index');  
+            Route::get('/create', 'KategoriController@tambah');  
+            Route::post('/add', 'KategoriController@add');  
+        });
+
+        Route::group(['prefix'=>'rentang'], function(){
+            Route::get('/{idKategori}/index', 'RentangController@index');  
+            Route::get('/{idKategori}/create', 'RentangController@tambah');  
+            Route::get('/{idRentang}/delete', 'RentangController@delete');  
+            Route::get('/{idRentang}/edit', 'RentangController@edit');  
+            Route::post('/edit', 'RentangController@editPost');  
+            Route::post('/add', 'RentangController@add');  
+        });
+        
 
         Route::group(['prefix'=>'user-management'], function(){
             Route::get('/',['as'=>'admin.user.index', 'uses'=>'UserManagementController@index']);
