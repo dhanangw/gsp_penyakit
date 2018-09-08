@@ -30,6 +30,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix'=>'kategori'], function(){
             Route::get('/index', 'KategoriController@index');  
             Route::get('/create', 'KategoriController@tambah');  
+            Route::get('/{idKategori}/edit', 'KategoriController@edit');  
+            Route::get('/{idKategori}/delete', 'KategoriController@delete');  
+            Route::post('/editpost', 'KategoriController@editPost');  
             Route::post('/add', 'KategoriController@add');  
         });
 

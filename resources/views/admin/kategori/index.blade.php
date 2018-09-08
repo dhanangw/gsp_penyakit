@@ -53,9 +53,9 @@ Kategori
       <td width="10%" style="text-align:center">{{$key+1}}</td>
       <td width="45%" style="text-align:center">{{$p->name}}</td>
       <td width="45%" style="text-align:center" >
-        <a onclick="return confirm('Anda yakin untuk menghapus data ini?');" href="{{url('admin/kategori'.$p->id.'/delete')}}" class="btn btn-danger btn-xs">
+        <a onclick="return confirm('Anda yakin untuk menghapus data ini?');" href="{{url('admin/kategori/'.$p->id.'/delete')}}" class="btn btn-danger btn-xs">
         <i class="fa fa-trash-o"></i> Hapus</a>
-        <a href="{{url('admin/kategori'.$p->id.'/edit/')}}" class="btn btn-warning btn-xs">
+        <a href="{{url('admin/kategori/'.$p->id.'/edit/')}}" class="btn btn-warning btn-xs">
         <i class="fa fa-pencil-square-o"></i> Edit</a>
         <a href="{{url('admin/rentang/'.$p->id.'/index/')}}" class="btn btn-info btn-xs">
         <i class="fa fa-plus-square"></i> Manage Rentang Kategori</a>

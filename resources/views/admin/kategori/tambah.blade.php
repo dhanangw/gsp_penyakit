@@ -50,6 +50,8 @@ Tambah Kategori
 					<label for="no_index" class="col-sm-2 control-label">Nama Kategori</label>
 					<div class="col-md-8">
 						<input type="text" class="form-control input-lg" id="name" name="name" placeholder="Masukkan nama kategori"  required>
+					</div>
+				</div>
 				<br>
 				<div class="form-group text-center">
 					<div class="col-md-8 col-md-offset-2">

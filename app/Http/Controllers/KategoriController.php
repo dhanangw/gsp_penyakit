@@ -30,7 +30,7 @@ class KategoriController extends Controller
     public function edit($id)
     {
         $data = [
-            'data' => Pasien::find($id)
+            'kategori' => Kategori::find($id)
         ];
         return view('admin.kategori.edit',$data);
     }
@@ -38,62 +38,34 @@ class KategoriController extends Controller
     public function editPost(Request $request)
     {
         $validation = [
-            "no_index" => "required",
-            "uptd" => "required",
-            "tanggal" => "required",
-            "nama" => "required",
-            "alamat" => "required",
-            "kota" => "required",
-            "kecamatan" => "required",
-            "kelurahan" => "required",
-            "nik" => "required",
-            "umur" => "required",
-            "tanggal_lahir" => "required",
-            "jenis_kelamin" => "required",
-            "pendidikan" => "required",
-            "tipe_pasien" => "required",
-            "keluhan" => "required"
+            "name" => "required",
         ];
         $validation = Validator::make($request->all(),$validation);
         if ($validation->fails()) {
             Session::put('alert-warning', 'Data gagal diubah, pastikan semua field telah terisi');
             return redirect()->back()->withInput();
         } else {
-            $pasien = Pasien::find($request->input('id_pasien'));
+            $kategori = Kategori::find($request->input('idKategori'));
 
-            $pasien->update([
-                "no_index" => $request->input('no_index'),
-                "uptd" => $request->input('uptd'),
-                "tanggal" => $request->input('tanggal'),
-                "nama" => $request->input('nama'),
-                "alamat" => $request->input('alamat'),
-                "kota" => $request->input('kota'),
-                "kecamatan" => $request->input('kecamatan'),
-                "kelurahan" => $request->input('kelurahan'),
-                "nik" => $request->input('nik'),
-                "umur" => $request->input('umur'),
-                "tanggal_lahir" => $request->input('tanggal_lahir'),
-                "jenis_kelamin" => $request->input('jenis_kelamin'),
-                "pendidikan" => $request->input('pendidikan'),
-                "tipe_pasien" => $request->input('tipe_pasien'),
-                "keluhan" => $request->input('keluhan')
+            $kategori->update([
+                "name" => $request->input('name'),
             ]);
 
-            $pasien->save();
+            $kategori->save();
 
             // Notifikasi sukses
             Session::put('alert-success', 'Data berhasil diedit');
 
-            return Redirect::to('admin/index');
+            return Redirect::to('admin/kategori/index');
         }
         
     }
 
     public function delete($id)
     {
-        Pasien::find($id)->delete();
+        Kategori::find($id)->delete();
         Session::put('alert-success', 'Data berhasil dihapus');
-        return Redirect::to('admin/index');
+        return Redirect::to('admin/kategori/index');
     }
 
     public function create()
