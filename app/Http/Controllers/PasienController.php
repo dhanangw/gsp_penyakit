@@ -130,9 +130,20 @@ class PasienController extends Controller
             Session::put('alert-warning', 'Data gagal ditambahkan, pastikan semua field telah terisi');
             return redirect()->back()->withInput();
         } else {
-            $jenisKelamin = $request->input('jenis_kelamin');
+            // $jenisKelamin = $request->input('jenis_kelamin');
+            switch ($request->input('jenis_kelamin')) {
+                case $request->input('jenis_kelamin') = Laki-laki:
+                    $jenis_kelamin = 'L';
+                    break;
+                case $request->input('jenis_kelamin') = Perempuan:
+                    $jenis_kelamin = 'P';
+                    break;
+            }
             switch ($request->input('umur')) {
-                case $request->input('umur') >= 1:
+                case $request->input('umur') == 0:
+                    $umur = 'u1';
+                    break;
+                case $request->input('umur') == 1:
                     $umur = 'u1';
                     break;
                 case $request->input('umur') == 2:

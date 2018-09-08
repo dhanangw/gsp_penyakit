@@ -56,7 +56,7 @@ Tambah Data Pasien
 				<div class="form-group">
 					<label for="uptd" class="col-sm-2 control-label">UPTD</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg" id="uptd" name="uptd" placeholder="Masukkan UPTD Pasien" @isset($pasien) value="{{$pasien->uptd}}" @endisset required>
+						<input type="text" class="form-control input-lg" id="uptd" name="uptd" placeholder="Masukkan UPTD" @isset($pasien) value="{{$pasien->uptd}}" @endisset required>
 					</div>
 				</div>
 				
@@ -98,14 +98,14 @@ Tambah Data Pasien
 				<div class="form-group">
 					<label for="kelurahan" class="col-sm-2 control-label">Kelurahan</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg" id="kelurahan" name="kelurahan" placeholder="Masukkan Kelurahan Barang" @isset($pasien) value="{{$pasien->kelurahan}}" @endisset required>
+						<input type="text" class="form-control input-lg" id="kelurahan" name="kelurahan" placeholder="Masukkan Kelurahan Pasien" @isset($pasien) value="{{$pasien->kelurahan}}" @endisset required>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="nik" class="col-sm-2 control-label">NIK</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg" id="nik" name="nik" placeholder="Masukkan NIK Barang" @isset($pasien) value="{{$pasien->nik}}" @endisset required>
+						<input type="text" class="form-control input-lg" id="nik" name="nik" placeholder="Masukkan NIK Pasien" @isset($pasien) value="{{$pasien->nik}}" @endisset required>
 					</div>
 				</div>
 
