@@ -24,12 +24,8 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">Menu</li>
             <!-- Optionally, you can add icons to the links -->
-<<<<<<< HEAD
             <li><a href="{{ url('admin/index') }}"><i class='fa fa-link'></i> <span>Manajemen Pasien</span></a></li>
-=======
-            <li class="active"><a href="{{ url('admin/index') }}"><i class='fa fa-link'></i> <span>Manajemen Pasien</span></a></li>
             <li><a href="{{ url('admin/kategori/index') }}"><i class='fa fa-link'></i> <span>Manajemen Kategori</span></a></li>
->>>>>>> ec70e60e92bfccea6caeed80ff4d5f61c8c74f54
             <li><a href="{{ url('/caripola') }}"><i class='fa fa-link'></i> <span>Cari Pola Pasien</span></a></li>
         </ul><!-- /.sidebar-menu -->
     </section>
