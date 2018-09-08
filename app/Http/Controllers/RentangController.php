@@ -32,8 +32,10 @@ class RentangController extends Controller
 
     public function edit($id)
     {
+        $rentang = RentangKategori::find($id);
         $data = [
-            'rentang' => RentangKategori::find($id)
+            'rentang' => $rentang,
+            'kategori' => Kategori::find($rentang->kategori_id)
         ];
         return view('admin.rentang.edit',$data);
     }
@@ -42,8 +44,9 @@ class RentangController extends Controller
     {
         $validation = [
             "name" => "required",
-            "batas_bawah" => "required",
-            "batas_atas" => "required",
+            "batas_bawah" => "sometimes",
+            "batas_atas" => "sometimes",
+            "value" => "value",
         ];
         $validation = Validator::make($request->all(),$validation);
         if ($validation->fails()) {
@@ -51,12 +54,19 @@ class RentangController extends Controller
             return redirect()->back()->withInput();
         } else {
             $rentang = RentangKategori::find($request->input('idRentang'));
-
-            $rentang->update([
-                "name" => $request->input('name'),
-                "batas_bawah" => $request->input('batas_bawah'),
-                "batas_atas" => $request->input('batas_atas'),
-            ]);
+            if (count($request->input('batas_bawah')) !== 0) {
+                $rentang->update([
+                    "name" => $request->input('name'),
+                    "batas_bawah" => $request->input('batas_bawah'),
+                    "batas_atas" => $request->input('batas_atas'), 
+                ]);
+            } else {
+                $rentang->update([
+                    "name" => $request->input('name'),
+                    "value" => $request->input('value'),
+                ]);
+            }
+            
 
             $rentang->save();
 
@@ -84,21 +94,30 @@ class RentangController extends Controller
     {
         $validation = [
             "name" => "required",
-            "batas_bawah" => "required",
-            "batas_atas" => "required",
+            "batas_bawah" => "sometimes",
+            "batas_atas" => "sometimes",
+            "value" => "sometimes",
         ];
         $validation = Validator::make($request->all(),$validation);
         if ($validation->fails()) {
             Session::put('alert-warning', 'Data gagal ditambahkan, pastikan semua field telah terisi');
             return redirect()->back()->withInput();
         } else { 
+            if (count($request->input('batas_bawah')) !== 0) {
+                RentangKategori::create([
+                    'name' => $request->input('name'), 
+                    'kategori_id' => $request->input('id_kategori'), 
+                    'batas_bawah' => $request->input('batas_bawah'), 
+                    'batas_atas' => $request->input('batas_atas'), 
+                ]);
+            } else {
+                 RentangKategori::create([
+                    'name' => $request->input('name'), 
+                    'kategori_id' => $request->input('id_kategori'), 
+                    'value' => $request->input('value'), 
+                ]);
+            }
             
-            RentangKategori::create([
-                'name' => $request->input('name'), 
-                'kategori_id' => $request->input('id_kategori'), 
-                'batas_bawah' => $request->input('batas_bawah'), 
-                'batas_atas' => $request->input('batas_atas'), 
-            ]);
             
             Session::put('alert-success', 'Rentang Kategori berhasil ditambahkan');
             return Redirect::to('admin/rentang/'.$request->input('id_kategori').'/index');

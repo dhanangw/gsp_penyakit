@@ -45,6 +45,7 @@ Rentang Kategori "{{$kategori->name}}"
       <th style="text-align:center">Nama Rentang</th>
       <th style="text-align:center">Batas bawah</th>
       <th style="text-align:center">Batas atas</th>
+      <th style="text-align:center">Value</th>
       <th style="text-align:center">Action</th>
     </tr> 
   </thead>
@@ -54,8 +55,9 @@ Rentang Kategori "{{$kategori->name}}"
     <tr>
       <td width="0%" style="text-align:center">{{$key+1}}</td>
       <td width="20%" style="text-align:center">{{$p->name}}</td>
-      <td width="20%" style="text-align:center">{{$p->batas_bawah}}</td>
-      <td width="20%" style="text-align:center">{{$p->batas_atas}}</td>
+      <td width="20%" style="text-align:center">{{isset($p->batas_bawah) ? $p->batas_bawah : '-' }}</td>
+      <td width="20%" style="text-align:center">{{isset($p->batas_atas) ? $p->batas_atas : '-' }}</td>
+      <td width="20%" style="text-align:center">{{isset($p->value) ? $p->value : '-' }}</td>
       <td width="20%" style="text-align:center" >
         <a onclick="return confirm('Anda yakin untuk menghapus data ini?');" href="{{url('admin/rentang/'.$p->id.'/delete')}}" class="btn btn-danger btn-xs">
         <i class="fa fa-trash-o"></i> Hapus</a>

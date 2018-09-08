@@ -54,7 +54,7 @@ Tambah Data Pasien
 				</div>
 
 				<br>
-
+				@if($kategori->type == 'ranged')
 				<div class="form-group">
 					<label for="no_index" class="col-sm-2 control-label">Batas Bawah</label>
 					<div class="col-md-8">
@@ -63,7 +63,7 @@ Tambah Data Pasien
 				</div>
 
 				<br>
-
+				
 				<div class="form-group">
 					<label for="no_index" class="col-sm-2 control-label">Batas Atas</label>
 					<div class="col-md-8">
@@ -72,7 +72,14 @@ Tambah Data Pasien
 				</div>
 
 				<br>
-
+				@else
+				<div class="form-group">
+					<label for="no_index" class="col-sm-2 control-label">Value</label>
+					<div class="col-md-8">
+						<input type="text" class="form-control input-lg" id="value" name="value" placeholder="Masukkan batas atas rentang" value="{{$rentang->value}}" required>
+					</div>
+				</div>
+				@endif
 				<div class="form-group text-center">
 					<div class="col-md-8 col-md-offset-2">
 					<button type="submit" class="btn btn-primary btn-lg">

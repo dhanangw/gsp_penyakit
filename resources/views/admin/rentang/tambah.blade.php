@@ -53,7 +53,7 @@ Tambah Rentang Kategori "{{$kategori->name}}"
 						<input type="text" class="form-control input-lg" id="name" name="name" placeholder="Masukkan nama rentang"  required>
 					</div>
 				</div>
-
+				@if($kategori->type === 'ranged')
 				<br>
 
 				<div class="form-group">
@@ -73,7 +73,14 @@ Tambah Rentang Kategori "{{$kategori->name}}"
 				</div>
 
 				<br>
-				
+				@else
+				<div class="form-group">
+					<label for="no_index" class="col-sm-2 control-label">Value</label>
+					<div class="col-md-8">
+						<input type="text" class="form-control input-lg" id="value" name="value" placeholder="Masukkan batas atas rentang"  required>
+					</div>
+				</div>
+				@endif
 				<div class="form-group text-center">
 					<div class="col-md-8 col-md-offset-2">
 					<button type="submit" class="btn btn-primary btn-lg">

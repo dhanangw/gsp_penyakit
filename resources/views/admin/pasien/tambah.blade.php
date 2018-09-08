@@ -108,31 +108,39 @@ Tambah Data Pasien
 						<input type="text" class="form-control input-lg" id="nik" name="nik" placeholder="Masukkan NIK Barang" @isset($pasien) value="{{$pasien->nik}}" @endisset required>
 					</div>
 				</div>
-
+				@foreach($kategori as $kategori)
+				@php 
+					$name = $kategori->name 
+				@endphp
+				@if($kategori->type == 'ranged')
 				<div class="form-group">
-					<label for="umur" class="col-sm-2 control-label">Umur</label>
+					<label for="{{$kategori->name}}" class="col-sm-2 control-label">{{$kategori->name}}</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg" id="umur" name="umur" placeholder="Masukkan Umur Pasien" @isset($pasien) value="{{$pasien->umur}}" @endisset required>
+						<input type="text" class="form-control input-lg" id="{{$kategori->name}}" name="{{$kategori->name}}" placeholder="Masukkan {{$kategori->name}} Pasien" @isset($pasien) value="{{$pasien->$name}}" @endisset required>
 					</div>
 				</div>
-
+				@else
+				<div class="form-group">
+	              <label for="{{$kategori->name}}" class="col-sm-2 control-label "> {{$kategori->name}}</label>
+	              <div class="col-md-8">
+					<select class="form-control" name="{{$kategori->name}}" id="{{$kategori->name}}" required>
+							<option value="">-- Pilih {{$kategori->name}} --</option>
+							@foreach($rentang as $rentang)
+								@if($rentang->kategori_id === $kategori->id)
+									<option @isset($pasien) {{$pasien->$name === $rentang->value ? 'selected' : ''}}  @endisset value="{{$rentang->value}}">{{$rentang->name}}</option>
+								@endif
+							@endforeach
+					</select>
+	              </div>
+	            </div>
+				@endif
+				@endforeach
 				<div class="form-group">
 					<label for="tanggal" class="col-sm-2 control-label">Tanggal Lahir</label>
 					<div class="col-md-8">
 						<input type="text" class="form-control input-lg datepicker" id="tanggal_lahir" name="tanggal_lahir" placeholder="Masukkan Tanggal Lahir Pasien" @isset($pasien) value="{{$pasien->tanggal_lahir}}" @endisset required>
 					</div>
 				</div>
-
-				<div class="form-group">
-	              <label for="jenis_kelamin" class="col-sm-2 control-label "> Jenis Kelamin</label>
-	              <div class="col-md-8">
-					<select class="form-control" name="jenis_kelamin" id="jenis_kelamin" required>
-							<option value="">-- Pilih Jenis Kelamin --</option>
-							<option @isset($pasien) {{$pasien->jenis_kelamin === 'L' ? 'selected' : ''}}  @endisset value="L">Laki-laki</option>
-							<option @isset($pasien) {{$pasien->jenis_kelamin === 'P' ? 'selected' : ''}}  @endisset  value="P">Perempuan</option>
-					</select>
-	              </div>
-	            </div>
 
 				<div class="form-group">
 	              <label for="pendidikan" class="col-sm-2 control-label "> Pendidikan</label>

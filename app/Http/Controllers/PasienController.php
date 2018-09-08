@@ -8,6 +8,8 @@ use Session;
 use Validator;
 use Redirect;
 use App\Pasien;
+use App\Kategori;
+use App\RentangKategori;
 use App\Dummy;
 
 class PasienController extends Controller
@@ -24,14 +26,13 @@ class PasienController extends Controller
 
     public function tambah($id = null)
     {
+        $data['kategori'] = Kategori::all();
+        $data['rentang'] = RentangKategori::all();
         if (isset($id)) {
-            $pasien = Pasien::find($id);
-            $data = [
-                'pasien' => $pasien
-            ];
+            $data['pasien'] = Pasien::find($id);
             return view('admin.pasien.tambah',$data);
         } else {
-            return view('admin.pasien.tambah');
+            return view('admin.pasien.tambah',$data);
         }
         
     } 
@@ -108,11 +109,19 @@ class PasienController extends Controller
 
     public function create()
     {
-        return view('admin.pasien.tambah');
+        $data['kategori'] = Kategori::all();
+        $data['rentang'] = RentangKategori::all();
+        
+        return view('admin.pasien.tambah',$data);
     }
 
     public function add(Request $request)
     {
+        $kategori = Kategori::select('name')->get();
+        foreach ($kategori as $key => $value) {
+            $kategoriRule = [$value->name => 'required'];
+        }
+        
         $validation = [
             "no_index" => "required",
             "uptd" => "required",
@@ -123,38 +132,34 @@ class PasienController extends Controller
             "kecamatan" => "required",
             "kelurahan" => "required",
             "nik" => "required",
-            "umur" => "required",
             "tanggal_lahir" => "required",
             "jenis_kelamin" => "required",
             "pendidikan" => "required",
             "tipe_pasien" => "required",
             "keluhan" => "required"
         ];
+        $validation = array_merge($validation,$kategoriRule);
         $validation = Validator::make($request->all(),$validation);
         if ($validation->fails()) {
             Session::put('alert-warning', 'Data gagal ditambahkan, pastikan semua field telah terisi');
             return redirect()->back()->withInput();
         } else {
-            $jenisKelamin = $request->input('jenis_kelamin');
-            switch ($request->input('umur')) {
-                case $request->input('umur') <= 1:
-                    $umur = 'u1';
-                    break;
-                case $request->input('umur') == 2:
-                    $umur = 'u2';
-                    break;
-                case $request->input('umur') == 3:
-                    $umur = 'u3';
-                    break;
-                case $request->input('umur') == 4:
-                    $umur = 'u4';
-                    break;
-                case $request->input('umur') == 5:
-                    $umur = 'u5';
-                    break;
-            }
             $keluhan = $request->input('keluhan');
-            $keluhan = $umur.','.strtolower($jenisKelamin).','.$keluhan;
+            $kategori = Kategori::all();
+            
+            foreach ($kategori as $key => $value) {
+                $kategoriRaw = $request->input($value->name);
+                if ($value->type == 'ranged') {
+                    $kategoriConverted = RentangKategori::where([
+                        ['kategori_id', '=', $value->id],
+                        ['batas_bawah', '<=', $kategoriRaw],
+                        ['batas_atas', '>=', $kategoriRaw]
+                    ])->value('name');
+                } else {
+                    $kategoriConverted = RentangKategori::where('value',$kategoriRaw)->value('name');
+                }
+                $keluhan = $kategoriConverted.','.$keluhan;
+            }
             
             Pasien::create([
                 'uptd' => $request->input('uptd'), 
@@ -166,7 +171,6 @@ class PasienController extends Controller
                 'kecamatan' => $request->input('kecamatan'),
                 'kelurahan' => $request->input('kelurahan'),
                 'nik' => $request->input('nik'),
-                'umur' => $request->input('umur'),
                 'tanggal_lahir' => $request->input('tanggal_lahir'),
                 'jenis_kelamin' => $request->input('jenis_kelamin'),
                 'pendidikan' => $request->input('pendidikan'),

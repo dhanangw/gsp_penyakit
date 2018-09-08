@@ -21,6 +21,7 @@ class RentangKategori extends Model
         'name',
         'batas_bawah',
         'batas_atas',
+        'value',
     ];
 
     

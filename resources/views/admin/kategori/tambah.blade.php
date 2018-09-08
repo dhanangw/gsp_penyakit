@@ -52,6 +52,19 @@ Tambah Kategori
 						<input type="text" class="form-control input-lg" id="name" name="name" placeholder="Masukkan nama kategori"  required>
 					</div>
 				</div>
+
+				<br>
+				<div class="form-group">
+	              <label for="jenis_kelamin" class="col-sm-2 control-label "> type</label>
+	              <div class="col-md-8">
+					<select class="form-control" name="type" id="type" required>
+							<option value="">-- Pilih tipe kategori --</option>
+							<option value="ranged">ranged</option>
+							<option value="exact value">exact value</option>
+					</select>
+	              </div>
+	            </div>
+
 				<br>
 				<div class="form-group text-center">
 					<div class="col-md-8 col-md-offset-2">

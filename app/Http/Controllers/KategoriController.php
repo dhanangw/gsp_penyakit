@@ -77,14 +77,17 @@ class KategoriController extends Controller
     {
         $validation = [
             "name" => "required",
+            "type" => "required",
         ];
         $validation = Validator::make($request->all(),$validation);
         if ($validation->fails()) {
             Session::put('alert-warning', 'Data gagal ditambahkan, pastikan semua field telah terisi');
             return redirect()->back()->withInput();
         } else { 
+            
             Kategori::create([
                 'name' => $request->input('name'), 
+                "type" => $request->input('type'), 
             ]);
             
             Session::put('alert-success', 'Kategori berhasil ditambahkan');
