@@ -9,7 +9,7 @@
     <div id="app" v-cloak>
         <div class="login-box">
             <div class="login-logo">
-                <a href=""><b>GSP</b>Penyakit</a>
+                <a href=""><b>GSP Penyakit</b></a>
             </div><!-- /.login-logo -->
 
         @if (count($errors) > 0)

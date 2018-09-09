@@ -31,14 +31,14 @@ Pola Pasien
   Sequence 1
 </div>
 <div style="overflow: auto">
-<table id="myTable" class="table table-striped table-bordered" cellspacing="0">
+<table id="myTable1" class="table table-striped table-bordered" cellspacing="0">
   <thead>
     <tr>
       <th style="text-align:center">Nomor</th>
-      <th style="text-align:center">item</th>
-      <th style="text-align:center">count</th>
-      <th style="text-align:center">support</th>
-      <th style="text-align:center">confidence</th>
+      <th style="text-align:center">Item</th>
+      <th style="text-align:center">Count</th>
+      <th style="text-align:center">Support</th>
+      <th style="text-align:center">Confidence</th>
     </tr> 
   </thead>
   <tbody>
@@ -57,19 +57,20 @@ Pola Pasien
     </tr>
   </tbody>
 </table>
+</div>
 <br><br>
 <div style="margin-bottom: 10px">
 Sequence 2
 </div>
 <div style="overflow: auto">
-<table id="myTable" class="table table-striped table-bordered" cellspacing="0">
+<table id="myTable2" class="table table-striped table-bordered" cellspacing="0">
   <thead>
     <tr>
       <th style="text-align:center">Nomor</th>
-      <th style="text-align:center">item</th>
-      <th style="text-align:center">count</th>
-      <th style="text-align:center">support</th>
-      <th style="text-align:center">confidence</th>
+      <th style="text-align:center">Item</th>
+      <th style="text-align:center">Count</th>
+      <th style="text-align:center">Support</th>
+      <th style="text-align:center">Confidence</th>
     </tr> 
   </thead>
   <tbody>
@@ -88,19 +89,20 @@ Sequence 2
     </tr>
   </tbody>
 </table>
+</div>
 <br><br>
 <div style="margin-bottom: 10px">
 Sequence 3
 </div>
 <div style="overflow: auto">
-<table id="myTable" class="table table-striped table-bordered" cellspacing="0">
+<table id="myTable3" class="table table-striped table-bordered" cellspacing="0">
   <thead>
     <tr>
       <th style="text-align:center">Nomor</th>
-      <th style="text-align:center">item</th>
-      <th style="text-align:center">count</th>
-      <th style="text-align:center">support</th>
-      <th style="text-align:center">confidence</th>
+      <th style="text-align:center">Item</th>
+      <th style="text-align:center">Count</th>
+      <th style="text-align:center">Support</th>
+      <th style="text-align:center">Confidence</th>
     </tr> 
   </thead>
   <tbody>
@@ -119,18 +121,33 @@ Sequence 3
     </tr>
   </tbody>
 </table>
-
 </div>
 
 
 @endsection
 
 @section('code-footer')
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script> 
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript">
-$(document).ready( function () {
-$('#myTable').DataTable();
-});
+<script src="//code.jquery.com/jquery-1.12.3.js"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<script>
+  $(document).ready(function() {
+  $('#myTable1').DataTable();
+  } 
+  );
+</script>
+<script>
+  $(document).ready(function() {
+  $('#myTable2').DataTable();
+  } 
+  );
+</script>
+<script>
+  $(document).ready(function() {
+  $('#myTable3').DataTable();
+  } 
+  );
 </script>
 @endsection

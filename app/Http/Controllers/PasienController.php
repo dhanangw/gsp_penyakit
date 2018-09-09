@@ -774,8 +774,10 @@ class PasienController extends Controller
             
             $minSupport = $request->input('min_support');
             $minConfidence = $request->input('min_confidence');
+            // dd($request->input('tanggal_batas_bawah'));
+            // dd($request->input('tanggal_batas_bawah'));
             
-            if (count($request->input('tanggal_batas_bawah')) != null && count($request->input('tanggal_batas_bawah')) != null) {
+            if (is_array($request->input('tanggal_batas_bawah')) && count($request->input('tanggal_batas_bawah')) != null && count($request->input('tanggal_batas_bawah')) != null) {
                 $batasBawah = $request->input('tanggal_batas_bawah');
                 $batasAtas = $request->input('tanggal_batas_atas');
                 $data = Pasien::select('keluhan')->whereBetween('tanggal',[$batasBawah,$batasAtas])->get();
