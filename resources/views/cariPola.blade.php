@@ -56,21 +56,21 @@ Cari Pola Keluhan Pasien
                 <div class="form-group">
 					<label for="no_index" class="col-sm-2 control-label">Minimum Confidence</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg" id="min_confidence" name="min_confidence" placeholder="Masukkan Minimum Support" required>
+						<input type="text" class="form-control input-lg" id="min_confidence" name="min_confidence" placeholder="Masukkan Minimum Confidence" required>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="tanggal" class="col-sm-2 control-label">Tanggal Batas Bawah</label>
+					<label for="tanggal" class="col-sm-2 control-label">Tanggal Awal</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg datepicker" id="datepicker" name="tanggal_batas_bawah" placeholder="Masukkan Tanggal Batas Bawah"  >
+						<input type="text" class="form-control input-lg datepicker" id="datepicker" name="tanggal_batas_bawah" placeholder="Masukkan Tanggal Awal"  >
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="tanggal" class="col-sm-2 control-label">Tanggal Batas Atas</label>
+					<label for="tanggal" class="col-sm-2 control-label">Tanggal Akhir</label>
 					<div class="col-md-8">
-						<input type="text" class="form-control input-lg datepicker" id="tanggal_batas_atas" name="tanggal_batas_atas" placeholder="Masukkan Tanggal Lahir Pasien" >
+						<input type="text" class="form-control input-lg datepicker" id="tanggal_batas_atas" name="tanggal_batas_atas" placeholder="Masukkan Tanggal Akhir" >
 					</div>
 				</div>
 

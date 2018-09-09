@@ -13,13 +13,7 @@ Pasien
 @endsection
 
 @section('main-content')
- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> 
- <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript">
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-});
-</script>
+
 <br>
 <!-- include summernote css/js-->
 <div class="flash-message" style="margin-left: -16px;margin-right: -16px; margin-top: 13px;">
@@ -54,7 +48,6 @@ Pasien
       <th style="text-align:center">Tanggal Lahir</th>
       <th style="text-align:center">Jenis Kelamin</th>
       <th style="text-align:center">Pendidikan</th>
-      <th style="text-align:center">Pekerjaan</th>
       <th style="text-align:center">Tipe Pasien</th>
       <th style="text-align:center">Keluhan</th>
       <th style="text-align:center">Action</th>
@@ -77,7 +70,6 @@ Pasien
       <td width="5%" style="text-align:center">{{$p->tanggal_lahir}}</td>
       <td width="5%" style="text-align:center">{{$p->jenis_kelamin}}</td>
       <td width="5%" style="text-align:center">{{$p->pendidikan}}</td>
-      <td width="5%" style="text-align:center">{{$p->pekerjaan}}</td>
       <td width="5%" style="text-align:center">{{$p->tipe_pasien}}</td>
       <td width="5%" style="text-align:center">{{$p->keluhan}}</td>
       <td style="text-align:center" >
@@ -101,4 +93,15 @@ Pasien
 @endsection
 
 @section('code-footer')
+<script src="//code.jquery.com/jquery-1.12.3.js"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<script>
+  $(document).ready(function() {
+  $('#myTable').DataTable();
+  } 
+  );
+</script>
 @endsection

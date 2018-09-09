@@ -13,13 +13,7 @@ Pola Pasien
 @endsection
 
 @section('main-content')
- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> 
- <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript">
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-});
-</script>
+
 <br>
 <!-- include summernote css/js-->
 <div class="flash-message" style="margin-left: -16px;margin-right: -16px; margin-top: 13px;">
@@ -132,4 +126,11 @@ Sequence 3
 @endsection
 
 @section('code-footer')
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script> 
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready( function () {
+$('#myTable').DataTable();
+});
+</script>
 @endsection
