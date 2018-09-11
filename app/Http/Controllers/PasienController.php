@@ -217,7 +217,7 @@ class PasienController extends Controller
                 }
             }
         }
-        
+        //dd($indexGejala);
         return $indexGejala;
     }
 
@@ -919,6 +919,6 @@ class PasienController extends Controller
                 "diagnosa" => $value->diagnosa,
             ]);
         }
-        dd('sudah dummy');
+        //dd('sudah dummy');
     }
 }
