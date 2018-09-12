@@ -349,7 +349,7 @@ class PasienController extends Controller
         $skippedSequence = [];
         foreach ($jumlahGejala as $indeksKeluhan1 => $value1) {
             foreach ($jumlahGejala as $indeksKeluhan2 => $value2) {
-                if ($indeksKeluhan1 == $indeksKeluhan2 || in_array([$indeksKeluhan2,$indeksKeluhan1],$skippedSequence) ) {
+                if ($indeksKeluhan1 == $indeksKeluhan2 || in_array([$indeksKeluhan2,$indeksKeluhan1],$skippedSequence) || isset($sequence2Bersamaan['('.$indeksKeluhan2.','.$indeksKeluhan1.')'])) {
                     continue;
                 }
                 $count = 0;
