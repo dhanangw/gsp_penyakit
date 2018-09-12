@@ -346,9 +346,10 @@ class PasienController extends Controller
     public function sequence2Bersamaan($jumlahGejala, $gejalaPasienInID, $minSupport, $minConfidence)
     {
         $sequence2Bersamaan = [];
+        $skippedSequence = [];
         foreach ($jumlahGejala as $indeksKeluhan1 => $value1) {
             foreach ($jumlahGejala as $indeksKeluhan2 => $value2) {
-                if ($indeksKeluhan1 == $indeksKeluhan2 || isset($sequence2Bersamaan['('.$indeksKeluhan2.','.$indeksKeluhan1.')'])) {
+                if ($indeksKeluhan1 == $indeksKeluhan2 || in_array([$indeksKeluhan2,$indeksKeluhan1],$skippedSequence) ) {
                     continue;
                 }
                 $count = 0;
@@ -370,11 +371,13 @@ class PasienController extends Controller
                     $sequence2Bersamaan['('.$indeksKeluhan1.','.$indeksKeluhan2.')']['count'] = $count;
                     $sequence2Bersamaan['('.$indeksKeluhan1.','.$indeksKeluhan2.')']['support'] = $supportPercentage;
                     $sequence2Bersamaan['('.$indeksKeluhan1.','.$indeksKeluhan2.')']['confidence'] = $confidencePercentage;
+                } else {
+                    array_push($skippedSequence,[$indeksKeluhan1,$indeksKeluhan2]);
                 }
             }
         }
         return $sequence2Bersamaan;
-    }
+    }   
 
     public function sequence2($sequence1, $keluhanPasienInID, $minSupport, $minConfidence)
     {
