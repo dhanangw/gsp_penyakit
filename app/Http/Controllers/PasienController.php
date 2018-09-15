@@ -395,61 +395,62 @@ class PasienController extends Controller
         foreach ($sequence2 as $key => $value) {
             $minusLastForSearch = $minusLast;
             unset($minusLastForSearch[$key]);
-            $key2 = false;
+            $key2 = [];
             foreach ($minus1st[$key] as $keyMinus1st => $valueMinus1st) {
                 foreach ($minusLastForSearch as $keyMinusLast => $valueMinusLast) {    
                     if(in_array($valueMinus1st, $valueMinusLast)){
-                        $key2 = $keyMinusLast;
-                        break 2;
+                        array_push($key2,$keyMinusLast);
                     }  
                 }
             }
             
-            if ($key2 === false) {
+            if (empty($key2)) {
                 continue;
-            } 
-            //jika format key1 = x,y dan format key2 = x,y
-            elseif (strpos($key,'(') === false && strpos($key2,'(') === false && strpos($key,')') === false && strpos($key2,')') === false) {
-                $tempKey = $key.','.$key2;
-                $tempKey = explode(',',$tempKey);
-                $tempKey = implode(',',[$tempKey[0],$tempKey[1],$tempKey[3]]);
             }
-            //jika format key1 = x,y dan format key2 = (x,y)
-            elseif (strpos($key2,'(') !== false && strpos($key,'(') === false) {
-                $item1 = explode(',', $key);
-                if (str_contains($key2,$item1[count($item1)-1])) {
-                    $tempKey = $item1[0].','.$key2;
+            foreach ($key2 as $key2) {
+                //jika format key1 = x,y dan format key2 = x,y
+                if (strpos($key,'(') === false && strpos($key2,'(') === false && strpos($key,')') === false && strpos($key2,')') === false) {
+                    $tempKey = $key.','.$key2;
+                    $tempKey = explode(',',$tempKey);
+                    $tempKey = implode(',',[$tempKey[0],$tempKey[1],$tempKey[3]]);
                 }
-            }
-            //jika format key1 = (x,y) dan format key2 = x,y
-            elseif (strpos($key,'(') !== false && strpos($key2,'(') === false) {
-                $item2 = explode(',', $key2);
-                if (str_contains($key2,$item2[count($item2)-1])) {
-                    $tempKey = $item2[0].','.$key2;
+                //jika format key1 = x,y dan format key2 = (x,y)
+                elseif (strpos($key2,'(') !== false && strpos($key,'(') === false) {
+                    $item1 = explode(',', $key);
+                    if (str_contains($key2,$item1[count($item1)-1])) {
+                        $tempKey = $item1[0].','.$key2;
+                    }
                 }
-            }
-            //jika format key1 = (x,y) dan format key2 = (x,y)
-            elseif (strpos($key,'(') !== false && strpos($key2,'(') !== false) {
-                $item = explode(',',$key);
-                $item2 = explode(',',$key2);
-                
-                foreach ($item as $keyItem1 => $value) {
-                    $item[$keyItem1] = filter_var($value, FILTER_SANITIZE_EMAIL);
+                //jika format key1 = (x,y) dan format key2 = x,y
+                elseif (strpos($key,'(') !== false && strpos($key2,'(') === false) {
+                    $item2 = explode(',', $key2);
+                    if (str_contains($key2,$item2[count($item2)-1])) {
+                        $tempKey = $item2[0].','.$key2;
+                    }
                 }
-                
-                foreach ($item2 as $keyItem2 => $value) {
-                    $item2[$keyItem2] = filter_var($value, FILTER_SANITIZE_EMAIL);
-                }
-                
-                $itemYangBeda = array_diff($item2,$item);
-                $tempKey = '('.implode(',',$item).','.implode('',$itemYangBeda).')';
-                if($this->checkIfCombinationExist($nextSequence,$tempKey) !== false){
-                    $tempKey = $this->checkIfCombinationExist($nextSequence,$tempKey);
-                } else {
+                //jika format key1 = (x,y) dan format key2 = (x,y)
+                elseif (strpos($key,'(') !== false && strpos($key2,'(') !== false) {
+                    $item = explode(',',$key);
+                    $item2 = explode(',',$key2);
+                    
+                    foreach ($item as $keyItem1 => $value) {
+                        $item[$keyItem1] = filter_var($value, FILTER_SANITIZE_EMAIL);
+                    }
+                    
+                    foreach ($item2 as $keyItem2 => $value) {
+                        $item2[$keyItem2] = filter_var($value, FILTER_SANITIZE_EMAIL);
+                    }
+                    
+                    $itemYangBeda = array_diff($item2,$item);
                     $tempKey = '('.implode(',',$item).','.implode('',$itemYangBeda).')';
+                    if($this->checkIfCombinationExist($nextSequence,$tempKey) !== false){
+                        $tempKey = $this->checkIfCombinationExist($nextSequence,$tempKey);
+                    } else {
+                        $tempKey = '('.implode(',',$item).','.implode('',$itemYangBeda).')';
+                    }
                 }
-            }
-            array_push($nextSequence,$tempKey);
+                array_push($nextSequence,$tempKey);
+            } 
         }
         return $nextSequence;
     }
@@ -800,7 +801,6 @@ class PasienController extends Controller
             $sequence2 = $this->sequence2($sequence1, $keluhanPasienInID, $minSupport, $minConfidence);
             $keySequence3 = $this->generateCandidate($sequence2);
             $sequence3 = $this->sequence3($keySequence3,$sequence2,$sequence1,$keluhanPasienInID,$minSupport,$minConfidence);
-            
             if (!empty($sequence1)) {
                 foreach ($sequence1 as $indeksKeluhan => $value) {
                     unset($sequence1[$indeksKeluhan]);
