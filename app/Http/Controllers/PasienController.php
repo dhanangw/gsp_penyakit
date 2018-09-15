@@ -883,7 +883,7 @@ class PasienController extends Controller
                         if (count($k) == 3) {
                             $set3 = $index[$k[1].$k[2]].')';
                         } else {
-                            $set3 = $index[$k[1]].')';
+                            $set3 = $index[$k[0]].')';
                         }
                     } else {
                         $set3 = $index[$keluhan[2]];
