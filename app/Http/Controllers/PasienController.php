@@ -443,11 +443,12 @@ class PasienController extends Controller
                     
                     $itemYangBeda = array_diff($item2,$item);
                     $tempKey = '('.implode(',',$item).','.implode('',$itemYangBeda).')';
-                    if($this->checkIfCombinationExist($nextSequence,$tempKey) !== false){
-                        $tempKey = $this->checkIfCombinationExist($nextSequence,$tempKey);
-                    } else {
-                        $tempKey = '('.implode(',',$item).','.implode('',$itemYangBeda).')';
-                    }
+
+                    $cekKembar = $this->checkIfCombinationExist($nextSequence,$tempKey);
+                    
+                    if ($cekKembar !== false){
+                        $tempKey = $cekKembar;
+                    } 
                 }
                 array_push($nextSequence,$tempKey);
             } 
@@ -455,31 +456,35 @@ class PasienController extends Controller
         return $nextSequence;
     }
 
-    public function checkIfCombinationExist($previousSequences, $newSequence)
+    public function checkIfCombinationExist($previousSequences, $sequence)
     {
+        $result = false;
         //cari tahu apakah sudah ada array key yang sama (a,b,c) == (b,c,a) == (b,a,c) == ...
         if (!empty($previousSequences) ) {
-            $newSequence = explode(',',$newSequence);
+            $jumlahYangSama = 0;
+            $newSequence = explode(',',$sequence);
             foreach ($newSequence as $key => $value) {
                 $newSequence[$key] = filter_var($value, FILTER_SANITIZE_EMAIL);
             }
-            foreach ($previousSequences as $keyPreviousSequence => $value) {
+            
+            foreach ($previousSequences as $keyPreviousSequence) {
                 $keyPreviousSequence = explode(',',$keyPreviousSequence);
                 if (strpos($keyPreviousSequence[0],'(') !== false && strpos($keyPreviousSequence[count($keyPreviousSequence)-1],')') !== false) {
                     foreach ($keyPreviousSequence as $keyPreviousSequenceCleaned => $value) {
                         $keyPreviousSequence[$keyPreviousSequenceCleaned] = filter_var($value, FILTER_SANITIZE_EMAIL);
                     }
+                    //jika perbedaan array tidak kosong maka elemen array sama
                     if (empty(array_diff($keyPreviousSequence,$newSequence))) {
-                        $newSequence = implode(',',$newSequence);
-                        return '('.$newSequence.')';
+                        $jumlahYangSama++;
                     }
-                } else {
-                    continue;
                 }
             }
-            return false;
+            if ($jumlahYangSama === 0) {
+                $newSequence = implode(',',$newSequence);
+                $result = '('.$newSequence.')';
+            }
         }
-        return false;
+        return $result;
     }
 
     public function sequence3($keySequence3,$sequence2,$sequence1,$keluhanPasienInID, $minSupport, $minConfidence)
@@ -540,7 +545,7 @@ class PasienController extends Controller
                     filter_var($key[1], FILTER_SANITIZE_EMAIL),
                     filter_var($key[2], FILTER_SANITIZE_EMAIL)
                 ];
-
+                
                 foreach ($keluhanPasienInID as $nomorIndexPasien => $dataBerobat) {
                     $adaSet1 = false;
                     $adaSet2 = false;
@@ -554,25 +559,27 @@ class PasienController extends Controller
                         }
                     }
                     
-                    if (isset($adaSet1Key)) {
-                        //cari apakah ada set 2 di data berobat
-                        foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                            if ($keyBerobat <= $adaSet1Key) {
-                                continue;
-                            } else {
-                                if (in_array($set2,$gejalaBerobat)) {
-                                    $adaSet2 = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    // if (isset($adaSet1Key)) {
+                    //     //cari apakah ada set 2 di data berobat
+                    //     foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
+                    //         if ($keyBerobat <= $adaSet1Key) {
+                    //             continue;
+                    //         } else {
+                    //             if (in_array($set2,$gejalaBerobat)) {
+                    //                 $adaSet2 = true;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }
+                    // }
                     
                     //jika ada set 1 dan ada set 2
-                    if ($adaSet1 === true && $adaSet2 === true) {
+                    // if ($adaSet1 === true && $adaSet2 === true) {
+                    if ($adaSet1 === true) {
                         $count = $count+1;
                     }
                 }
+                
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
                 $confidence = $count / $sequence1[$key[0]]['count'];
@@ -599,22 +606,22 @@ class PasienController extends Controller
                         }
                     }
                     
-                    if (isset($adaSet1Key)) {
-                        //cari apakah ada set 2 di data berobat
-                        foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                            if ($keyBerobat <= $adaSet1Key) {
-                                continue;
-                            } else {
-                                if (in_array($set2,$gejalaBerobat)) {
-                                    $adaSet2 = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    // if (isset($adaSet1Key)) {
+                    //     //cari apakah ada set 2 di data berobat
+                    //     foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
+                    //         if ($keyBerobat <= $adaSet1Key) {
+                    //             continue;
+                    //         } else {
+                    //             if (in_array($set2,$gejalaBerobat)) {
+                    //                 $adaSet2 = true;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }
+                    // }
                     
                     //jika ada set 1 dan ada set 2
-                    if ($adaSet1 === true && $adaSet2 === true) {
+                    if ($adaSet1 === true) {
                         $count = $count+1;
                     }
                 }
@@ -895,7 +902,7 @@ class PasienController extends Controller
                     $sequence3[$new_index] = $value;
                 }
             }
-            
+            dd($sequence3);
             $data = [
                 'sequence1' => $sequence1,
                 'sequence2' => $sequence2,
