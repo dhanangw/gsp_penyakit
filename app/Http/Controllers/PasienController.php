@@ -902,7 +902,6 @@ class PasienController extends Controller
                     $sequence3[$new_index] = $value;
                 }
             }
-            dd($sequence3);
             $data = [
                 'sequence1' => $sequence1,
                 'sequence2' => $sequence2,
