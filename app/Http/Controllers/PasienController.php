@@ -680,10 +680,12 @@ class PasienController extends Controller
                     $confidencePercentage = round((float)$confidence * 100 );
                 }
             } 
-            if ($supportPercentage >= $minSupport && $confidencePercentage >= $minConfidence) {
-                $sequence3[$value]['count'] = $count;
-                $sequence3[$value]['support'] = $supportPercentage;
-                $sequence3[$value]['confidence'] = $confidencePercentage;
+            if (isset($confidencePercentage, $supportPercentage)) {
+                if ($supportPercentage >= $minSupport && $confidencePercentage >= $minConfidence) {
+                    $sequence3[$value]['count'] = $count;
+                    $sequence3[$value]['support'] = $supportPercentage;
+                    $sequence3[$value]['confidence'] = $confidencePercentage;
+                }   
             }
         }
         return $sequence3;
