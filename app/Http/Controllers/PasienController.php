@@ -646,19 +646,22 @@ class PasienController extends Controller
                         }
                     }
                     
-                    //cari apakah ada set 2 di data berobat
-                    foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                        if ($keyBerobat <= $adaSet1Key) {
-                            continue;
-                        } else {
-                            if (in_array($set2,$gejalaBerobat)) {
-                                $adaSet2 = true;
-                                break;
-                            }
-                        }
-                    }
-                    //jika ada set 1 dan ada set 2
-                    if ($adaSet1 === true && $adaSet2 === true) {
+                     // if (isset($adaSet1Key)) {
+                    //     //cari apakah ada set 2 di data berobat
+                    //     foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
+                    //         if ($keyBerobat <= $adaSet1Key) {
+                    //             continue;
+                    //         } else {
+                    //             if (in_array($set2,$gejalaBerobat)) {
+                    //                 $adaSet2 = true;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }
+                    // }
+
+                    //jika ada set 1 
+                    if ($adaSet1 === true) {
                         $count = $count+1;
                     }
                 }
