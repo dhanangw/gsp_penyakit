@@ -45,7 +45,7 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><b>GSP-Penyakit</b></a>
+                <a class="navbar-brand" href="#"><b>GSP Penyakit</b></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -66,7 +66,7 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
             <div class="container">
                 <div class="row centered">
                     <div class="col-lg-12">
-                        <h1><b>Sistem Identifikasi Pola Gejala Penyakit Balita</b></h1>
+                        <h1><b>Sistem Identifikasi Pola Penyakit Balita</b></h1>
                         <br><br><br><br><br><br><br>
                     </div>
                 </div>
@@ -79,7 +79,7 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
         <div id="c">
             <div class="container">
                 <p>
-                    © Ryan Rahmanda Noor Firmansyah Basoeki | 2018
+                    <b>Copyright &copy; 2018</b> Ryan Rahmanda Noor Firmansyah Basoeki and Dhanang Wibisono
                 </p>
             </div>
         </div>

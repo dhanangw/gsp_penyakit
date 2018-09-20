@@ -386,6 +386,85 @@ class PasienController extends Controller
         return array_merge($sequence2Terpisah,$sequence2Bersamaan);
     }
 
+    public function minus1st($sequence2)
+    {
+        $resultMinus1st = [];
+        foreach ($sequence2 as $sequenceKey => $value) {
+            $item = explode(',', $sequenceKey);
+            $minus1st = $item[0];    
+            
+            if (strpos($minus1st,')') === false && strpos($minus1st,'(') === false) {
+                unset($item[0]);
+                $result = implode(',',$item);
+                $resultMinus1st[$sequenceKey] = [$result];
+            } else {
+                $result = [];
+                if (isset($item[1])) {
+                    if (strpos($item[1],')') !== false) {
+                        $setBerikutnya = array_slice($item, 2);
+                        $item = array_diff($item, $setBerikutnya);
+                        
+                        foreach (array_reverse($item) as $key => $value) {
+                            $t = filter_var($value, FILTER_SANITIZE_EMAIL).implode(',',$setBerikutnya);
+                            array_push($result,$t);        
+                        }
+                    }
+                } else {
+                    foreach (array_reverse($item) as $key => $value) {
+                        $t = filter_var($value, FILTER_SANITIZE_EMAIL);
+                        array_push($result,$t);
+                    }
+                }
+                $resultMinus1st[$sequenceKey] =  $result;
+            } 
+        }
+        return $resultMinus1st;
+    }
+
+    public function minusLast($sequence2)
+    {
+        $resultMinusLast = [];
+        foreach ($sequence2 as $sequenceKey => $value) {
+            $item = explode(',', $sequenceKey);
+            $max = count($item)-1;
+            $minusLast = $item[$max];    
+            
+            if (strpos($minusLast,'(') === false && strpos($minusLast,')') === false) {
+                unset($item[$max]);
+                $result = implode(',',$item);    
+                $resultMinusLast[$sequenceKey] =  [$result];
+            } else {
+                //cek apakah gandeng atau sendirian
+                if (strpos($item[$max-1],'(') !== false && !isset($item[$max-2])) {
+                    //gandeng sendirian
+                    foreach ($item as $key => $value) {
+                        $item[$key] = filter_var($value, FILTER_SANITIZE_EMAIL);
+                    }
+                    $resultMinusLast[$sequenceKey] =  $item;
+                } else {
+                    //gandeng tidak sendirian
+                    if (strpos($item[$max-1],'(') !== false) {
+                        $setTerakhir = [ $item[$max-1],$item[$max] ];    
+                        $setSebelumnya = array_diff($item,$setTerakhir);
+                        $setSebelumnya = implode(',',$setSebelumnya);
+
+                        foreach ($setTerakhir as $key => $value) {
+                            $value = filter_var($value, FILTER_SANITIZE_EMAIL);
+                            $result[$key] =  $setSebelumnya.',('.$value.')';
+                        }
+                    } else {
+                        foreach ($item as $key => $value) {
+                            $t = filter_var($value, FILTER_SANITIZE_EMAIL);
+                            array_push($result,$t);
+                        }
+                    }
+                    $resultMinusLast[$sequenceKey] =  $result;
+                }   
+            }
+        }
+        return $resultMinusLast;
+    }
+
     public function generateCandidate($sequence2)
     {
         $minus1st = $this->minus1st($sequence2);
@@ -489,7 +568,7 @@ class PasienController extends Controller
 
     public function sequence3($keySequence3,$sequence2,$sequence1,$keluhanPasienInID, $minSupport, $minConfidence)
     {
-        // dd($keySequence3,$sequence2,$sequence1);
+        //dd($keySequence3,$sequence2,$sequence1);
         $sequence3 = [];
         foreach ($keySequence3 as $value) {
             $key = explode(',',$value);
@@ -522,7 +601,7 @@ class PasienController extends Controller
                         if ($keyBerobat <= $adaSet1Key) {
                             continue;
                         } else {
-                            if (in_array($indeksKeluhan2,$gejalaBerobat)) {
+                            if (in_array($set2,$gejalaBerobat)) {
                                 $adaSet2 = true;
                                 break;
                             }
@@ -533,14 +612,18 @@ class PasienController extends Controller
                         $count = $count+1;
                     }
                 }
+
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
-                $confidence = $count / $sequence2[$set1]['count'];
-                $confidencePercentage = round((float)$confidence * 100 );
+                if (isset($sequence2['('.$set1[0].','.$set1[1].')']) && $sequence2['('.$set1[0].','.$set1[1].')']['count'] !== 0) {
+                    $confidence = $count / $sequence2['('.$set1[0].','.$set1[1].')']['count'];
+                    $confidencePercentage = round((float)$confidence * 100 );
+                }
             }
             //key = 0,(0,0)
             elseif (strpos($key[1],'(') !== false && strpos($key[2],')') !== false) {
                 $set1 = filter_var($key[0], FILTER_SANITIZE_EMAIL);
+
                 $set2 = [
                     filter_var($key[1], FILTER_SANITIZE_EMAIL),
                     filter_var($key[2], FILTER_SANITIZE_EMAIL)
@@ -559,31 +642,29 @@ class PasienController extends Controller
                         }
                     }
                     
-                    // if (isset($adaSet1Key)) {
-                    //     //cari apakah ada set 2 di data berobat
-                    //     foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                    //         if ($keyBerobat <= $adaSet1Key) {
-                    //             continue;
-                    //         } else {
-                    //             if (in_array($set2,$gejalaBerobat)) {
-                    //                 $adaSet2 = true;
-                    //                 break;
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    
+                    //cari apakah ada set 2 di data berobat
+                    foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
+                        if ($keyBerobat <= $adaSet1Key) {
+                            continue;
+                        } else {
+                            if (in_array($set2,$gejalaBerobat)) {
+                                $adaSet2 = true;
+                                break;
+                            }
+                        }
+                    }
                     //jika ada set 1 dan ada set 2
-                    // if ($adaSet1 === true && $adaSet2 === true) {
-                    if ($adaSet1 === true) {
+                    if ($adaSet1 === true && $adaSet2 === true) {
                         $count = $count+1;
                     }
                 }
                 
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
-                $confidence = $count / $sequence1[$key[0]]['count'];
-                $confidencePercentage = round((float)$confidence * 100 );
+                if (isset($sequence2[$set1[0].','.$set2[1]]) && $sequence2[$set1[0].','.$set2[1]]['count'] !== 0) {
+                    $confidence = $count / $sequence2[$set1[0].','.$set2[1]]['count'];
+                    $confidencePercentage = round((float)$confidence * 100 );
+                }
             }
             //key = (0,0,0)
             elseif (strpos($key[0],'(') !== false && strpos($key[2],')') !== false) {
@@ -595,7 +676,6 @@ class PasienController extends Controller
 
                 foreach ($keluhanPasienInID as $nomorIndexPasien => $dataBerobat) {
                     $adaSet1 = false;
-                    $adaSet2 = false;
                     //cari apakah ada set 1 di data berobat
                     foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
                         if (in_array($set1,$gejalaBerobat)) 
@@ -606,162 +686,62 @@ class PasienController extends Controller
                         }
                     }
                     
-                    // if (isset($adaSet1Key)) {
-                    //     //cari apakah ada set 2 di data berobat
-                    //     foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                    //         if ($keyBerobat <= $adaSet1Key) {
-                    //             continue;
-                    //         } else {
-                    //             if (in_array($set2,$gejalaBerobat)) {
-                    //                 $adaSet2 = true;
-                    //                 break;
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    
-                    //jika ada set 1 dan ada set 2
+                    //jika ada set 1
                     if ($adaSet1 === true) {
-                        $count = $count+1;
-                    }
-                }
-                $support = $count / count($keluhanPasienInID);
-                $supportPercentage = round((float)$support * 100 );
-                $confidence = $count / $sequence1[$set1[0]]['count'];
-                $confidencePercentage = round((float)$confidence * 100 );
-            }
-            //key = 0,0,0
-            else {
-                $set1 = [filter_var($key[0], FILTER_SANITIZE_EMAIL),filter_var($key[1], FILTER_SANITIZE_EMAIL)];
-                $set2 = filter_var($key[2], FILTER_SANITIZE_EMAIL);
-                    
-
-                foreach ($keluhanPasienInID as $nomorIndexPasien => $dataBerobat) {
-                    $adaSet1 = false;
-                    $adaSet2 = false;
-                    //cari apakah ada set 1 di data berobat
-                    foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                        if (in_array($set1,$gejalaBerobat)) 
-                        {
-                            $adaSet1 = true;
-                            $adaSet1Key = $keyBerobat;
-                            break;
-                        }
-                    }
-                    
-                    if (isset($adaSet1Key)) {
-                        //cari apakah ada set 2 di data berobat
-                        foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
-                            if ($keyBerobat <= $adaSet1Key) {
-                                continue;
-                            } else {
-                                if (in_array($set2,$gejalaBerobat)) {
-                                    $adaSet2 = true;
-                                    $adaSet2Key = $keyBerobat;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    
-                    //jika ada set 1, ada set 2 dan ada set 3
-                    if ($adaSet1 === true && $adaSet2 === true) {
                         $count = $count+1;
                     }      
                 }
+
+                $support = $count / count($keluhanPasienInID);
+                $supportPercentage = round((float)$support * 100 );
+                if (isset($sequence2['('.$set1[0].','.$set1[1].')']) && $sequence2['('.$set1[0].','.$set1[1].')']['count'] !== 0) {
+                    $confidence = $count / $sequence2['('.$set1[0].','.$set1[1].')']['count'];
+                    $confidencePercentage = round((float)$confidence * 100 );
+                }
+            }
+            //key = 0,0,0
+            else {
+                $set1 = [
+                    filter_var($key[0], FILTER_SANITIZE_EMAIL),
+                    filter_var($key[1], FILTER_SANITIZE_EMAIL),
+                    filter_var($key[2], FILTER_SANITIZE_EMAIL)
+                ];
+
+                foreach ($keluhanPasienInID as $nomorIndexPasien => $dataBerobat) {
+                    $adaSet1 = false;
+                    //cari apakah ada set 1 di data berobat
+                    foreach ($dataBerobat as $keyBerobat => $gejalaBerobat) {
+                        if (in_array($set1,$gejalaBerobat)) 
+                        {
+                            $adaSet1 = true;
+                            $adaSet1Key = $keyBerobat;
+                            break;
+                        }
+                    }
+                    
+                    //jika ada set 1
+                    if ($adaSet1 === true) {
+                        $count = $count+1;
+                    }      
+                }
+
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
                 if (isset($sequence2[$set1[0].','.$set1[1]]) && $sequence2[$set1[0].','.$set1[1]]['count'] !== 0) {
                     $confidence = $count / $sequence2[$set1[0].','.$set1[1]]['count'];
                     $confidencePercentage = round((float)$confidence * 100 );
                 }
-            } 
+            }
+
+            $confidencePercentage = '';
             if ($supportPercentage >= $minSupport && $confidencePercentage >= $minConfidence) {
                 $sequence3[$value]['count'] = $count;
                 $sequence3[$value]['support'] = $supportPercentage;
                 $sequence3[$value]['confidence'] = $confidencePercentage;
             }
         }
+        //dd($sequence1,$sequence2,$keySequence3);
         return $sequence3;
-    }
-
-    public function minusLast($sequence2)
-    {
-        $resultMinusLast = [];
-        foreach ($sequence2 as $sequenceKey => $value) {
-            $item = explode(',', $sequenceKey);
-            $max = count($item)-1;
-            $minusLast = $item[$max];    
-            
-            if (strpos($minusLast,'(') === false && strpos($minusLast,')') === false) {
-                unset($item[$max]);
-                $result = implode(',',$item);    
-                $resultMinusLast[$sequenceKey] =  [$result];
-            } else {
-                //cek apakah gandeng atau sendirian
-                if (strpos($item[$max-1],'(') !== false && !isset($item[$max-2])) {
-                    //gandeng sendirian
-                    foreach ($item as $key => $value) {
-                        $item[$key] = filter_var($value, FILTER_SANITIZE_EMAIL);
-                    }
-                    $resultMinusLast[$sequenceKey] =  $item;
-                } else {
-                    //gandeng tidak sendirian
-                    if (strpos($item[$max-1],'(') !== false) {
-                        $setTerakhir = [ $item[$max-1],$item[$max] ];    
-                        $setSebelumnya = array_diff($item,$setTerakhir);
-                        $setSebelumnya = implode(',',$setSebelumnya);
-
-                        foreach ($setTerakhir as $key => $value) {
-                            $value = filter_var($value, FILTER_SANITIZE_EMAIL);
-                            $result[$key] =  $setSebelumnya.',('.$value.')';
-                        }
-                    } else {
-                        foreach ($item as $key => $value) {
-                            $t = filter_var($value, FILTER_SANITIZE_EMAIL);
-                            array_push($result,$t);
-                        }
-                    }
-                    $resultMinusLast[$sequenceKey] =  $result;
-                }   
-            }
-        }
-        return $resultMinusLast;
-    }
-
-    public function minus1st($sequence2)
-    {
-        $resultMinus1st = [];
-        foreach ($sequence2 as $sequenceKey => $value) {
-            $item = explode(',', $sequenceKey);
-            $minus1st = $item[0];    
-            
-            if (strpos($minus1st,')') === false && strpos($minus1st,'(') === false) {
-                unset($item[0]);
-                $result = implode(',',$item);
-                $resultMinus1st[$sequenceKey] = [$result];
-            } else {
-                $result = [];
-                if (isset($item[1])) {
-                    if (strpos($item[1],')') !== false) {
-                        $setBerikutnya = array_slice($item, 2);
-                        $item = array_diff($item, $setBerikutnya);
-                        
-                        foreach (array_reverse($item) as $key => $value) {
-                            $t = filter_var($value, FILTER_SANITIZE_EMAIL).implode(',',$setBerikutnya);
-                            array_push($result,$t);        
-                        }
-                    }
-                } else {
-                    foreach (array_reverse($item) as $key => $value) {
-                        $t = filter_var($value, FILTER_SANITIZE_EMAIL);
-                        array_push($result,$t);
-                    }
-                }
-                $resultMinus1st[$sequenceKey] =  $result;
-            } 
-        }
-        return $resultMinus1st;
     }
 
     public function cariPola()
