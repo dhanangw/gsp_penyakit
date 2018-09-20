@@ -5,7 +5,7 @@
 @endsection
 
 @section('htmlheader_title')
-Pasien
+Manajemen Pasien
 @endsection
 
 @section('contentheader_title')
@@ -13,7 +13,6 @@ Pasien
 @endsection
 
 @section('main-content')
-
 <br>
 <!-- include summernote css/js-->
 <div class="flash-message" style="margin-left: -16px;margin-right: -16px; margin-top: 13px;">

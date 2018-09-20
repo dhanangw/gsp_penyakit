@@ -4,6 +4,9 @@
 	{{ trans('adminlte_lang::message.home') }}
 @endsection
 
+@section('contentheader_title')
+Sistem Identifikasi Pola Penyakit Balita
+@endsection
 
 @section('main-content')
 	<div class="container-fluid spark-screen">
@@ -23,7 +26,7 @@
 						</div>
 					</div>
 					<div class="box-body">
-						{{ trans('adminlte_lang::message.logged') }}. Start creating your amazing application!
+						Selamat Datang! Silahkan memilih fitur program dengan menggunakan sidebar disebelah kiri
 					</div>
 					<!-- /.box-body -->
 				</div>
