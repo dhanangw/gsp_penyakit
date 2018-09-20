@@ -525,11 +525,15 @@ class PasienController extends Controller
 
                     $cekKembar = $this->checkIfCombinationExist($nextSequence,$tempKey);
                     
-                    if ($cekKembar !== false){
-                        $tempKey = $cekKembar;
-                    } 
+                    
+                    if ($cekKembar === false){
+                        $tempKey = '';
+                    }
                 }
-                array_push($nextSequence,$tempKey);
+                
+                if (!empty($tempKey)) {
+                    array_push($nextSequence,$tempKey);
+                }
             } 
         }
         return $nextSequence;
@@ -882,6 +886,7 @@ class PasienController extends Controller
                     $sequence3[$new_index] = $value;
                 }
             }
+            
             $data = [
                 'sequence1' => $sequence1,
                 'sequence2' => $sequence2,
