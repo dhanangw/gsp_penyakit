@@ -619,9 +619,13 @@ class PasienController extends Controller
 
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
-                if (isset($sequence2['('.$set1[0].','.$set1[1].')']) && $sequence2['('.$set1[0].','.$set1[1].')']['count'] !== 0) {
-                    $confidence = $count / $sequence2['('.$set1[0].','.$set1[1].')']['count'];
-                    $confidencePercentage = round((float)$confidence * 100 );
+                if (isset($sequence2['('.$set1[0].','.$set1[1].')']) && $sequence2['('.$set1[0].','.$set1[1].')']['count'] >= 0) {
+                    if ($sequence2['('.$set1[0].','.$set1[1].')']['count'] === 0) {
+                        $confidencePercentage = 0;
+                    } else {
+                        $confidence = $count / $sequence2['('.$set1[0].','.$set1[1].')']['count'];
+                        $confidencePercentage = round((float)$confidence * 100 );
+                    }
                 }
             }
             //key = 0,(0,0)
@@ -668,9 +672,13 @@ class PasienController extends Controller
                 
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
-                if (isset($sequence2[$set1[0].','.$set2[1]]) && $sequence2[$set1[0].','.$set2[1]]['count'] !== 0) {
-                    $confidence = $count / $sequence2[$set1[0].','.$set2[1]]['count'];
-                    $confidencePercentage = round((float)$confidence * 100 );
+                if (isset($sequence2[$set1[0].','.$set2[1]]) && $sequence2[$set1[0].','.$set2[1]]['count'] >= 0) {
+                    if ($sequence2[$set1[0].','.$set2[1]]['count'] === 0) {
+                        $confidencePercentage = 0;
+                    } else {
+                        $confidence = $count / $sequence2[$set1[0].','.$set2[1]]['count'];
+                        $confidencePercentage = round((float)$confidence * 100 );
+                    }
                 }
             }
             //key = (0,0,0)
@@ -701,9 +709,13 @@ class PasienController extends Controller
 
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
-                if (isset($sequence2['('.$set1[0].','.$set1[1].')']) && $sequence2['('.$set1[0].','.$set1[1].')']['count'] !== 0) {
-                    $confidence = $count / $sequence2['('.$set1[0].','.$set1[1].')']['count'];
-                    $confidencePercentage = round((float)$confidence * 100 );
+                if (isset($sequence2['('.$set1[0].','.$set1[1].')']) && $sequence2['('.$set1[0].','.$set1[1].')']['count'] >= 0) {
+                    if ($sequence2['('.$set1[0].','.$set1[1].')']['count'] === 0) {
+                        $confidencePercentage = 0;
+                    } else {
+                        $confidence = $count / $sequence2['('.$set1[0].','.$set1[1].')']['count'];
+                        $confidencePercentage = round((float)$confidence * 100 );
+                    }
                 }
             }
             //key = 0,0,0
@@ -734,9 +746,13 @@ class PasienController extends Controller
 
                 $support = $count / count($keluhanPasienInID);
                 $supportPercentage = round((float)$support * 100 );
-                if (isset($sequence2[$set1[0].','.$set1[1]]) && $sequence2[$set1[0].','.$set1[1]]['count'] !== 0) {
-                    $confidence = $count / $sequence2[$set1[0].','.$set1[1]]['count'];
-                    $confidencePercentage = round((float)$confidence * 100 );
+                if (isset($sequence2[$set1[0].','.$set1[1]]) && $sequence2[$set1[0].','.$set1[1]]['count'] >= 0) {
+                    if ($sequence2[$set1[0].','.$set1[1]]['count'] === 0) {
+                        $confidencePercentage = 0;
+                    } else {
+                        $confidence = $count / $sequence2[$set1[0].','.$set1[1]]['count'];
+                        $confidencePercentage = round((float)$confidence * 100 );
+                    }
                 }
             } 
             if (isset($confidencePercentage, $supportPercentage)) {
