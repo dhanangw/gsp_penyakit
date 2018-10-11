@@ -148,7 +148,7 @@ class PasienController extends Controller
             $kategori = Kategori::all();
             
             foreach ($kategori as $key => $value) {
-                $kategoriRaw = $request->input($value->name);
+                $kategoriRaw = $request->input(str_replace(' ', '_', $value->name));
                 if ($value->type == 'ranged') {
                     $kategoriConverted = RentangKategori::where([
                         ['kategori_id', '=', $value->id],
@@ -156,12 +156,12 @@ class PasienController extends Controller
                         ['batas_atas', '>=', $kategoriRaw]
                     ])->value('name');
                 } else {
-                    $kategoriConverted = RentangKategori::where('value',$kategoriRaw)->value('name');
+                    $kategoriConverted = RentangKategori::where('value',$kategoriRaw)->value('value');
                 }
                 $keluhan = $kategoriConverted.','.$keluhan;
             }
-            
-            Pasien::create([
+
+            $insert = [
                 'uptd' => $request->input('uptd'), 
                 'tanggal' => $request->input('tanggal'),
                 'no_index' => $request->input('no_index'),
@@ -177,7 +177,17 @@ class PasienController extends Controller
                 'pekerjaan' => $request->input('pekerjaan'),
                 'tipe_pasien' => $request->input('tipe-pasien'),
                 'keluhan' => $keluhan,
-            ]);
+            ];
+
+            $insert_kategori = [];
+            foreach ($kategori as $key => $value) {
+                $kategori_name_with_underscores = str_replace(' ', '_', $value->name);
+                $insert_kategori[strtolower($kategori_name_with_underscores)] = $request->input($value->name);
+            }
+
+            $insert = array_merge($insert, $insert_kategori);
+            
+            Pasien::create($insert);
             
             Session::put('alert-success', 'Data berhasil ditambahkan');
             return Redirect::to('admin/index');
